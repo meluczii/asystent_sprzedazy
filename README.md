@@ -1,14 +1,13 @@
 # Optymalizator Sprzedaży Ubrań
 
-Aplikacja Flask do:
+Aplikacja do:
 - generowania opisów ofert i hashtagów przez Claude,
 - importu CSV,
 - analizy sprzedaży przez Pandas,
 - wyliczania Top 5 produktów, średniej wartości i miesięcznych sum,
 - generowania narracyjnego podsumowania AI,
 - eksportu raportu do HTML,
-- walidacji plików i długości danych,
-- własnego limitu zapytań AI (10 na sesję).
+- walidacji plików i długości danych.
 
 ## Uruchomienie
 
@@ -37,7 +36,3 @@ Aplikacja nie wymaga jednej sztywnej nazwy kolumn. Rozpoznaje m.in.:
 
 Dla pełnego raportu sprzedaży najlepiej użyć np.:
 `produkt,cena,data,ilość`.
-
-## Uwaga
-
-Nie umieszczaj prawdziwego klucza API w repozytorium Git. Plik `.env` jest dodany do `.gitignore`.
