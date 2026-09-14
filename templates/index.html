@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">GENERATOR OFERT</p>
+    <h1>Przygotuj lepszy opis<br>sprzedawanego ubrania.</h1>
+    <p class="muted">Podaj informacje o produkcie, a AI przygotuje gotowy tytuł, opis i hashtagi.</p>
+</section>
+
+<form action="{{ url_for('generate') }}" method="post" class="card">
+    <label for="description">Dane produktu</label>
+    <textarea id="description" name="description" maxlength="2000"
+              placeholder="Np. czarna kurtka vintage, rozmiar M, stan bardzo dobry, nylon...">{{ submitted or "" }}</textarea>
+
+    <div class="row">
+        <div>
+            <label for="style">Styl</label>
+            <select id="style" name="style">
+                {% for option in ["Minimalistyczny", "Modowy", "Vintage / Y2K", "Streetwear", "Profesjonalny"] %}
+                    <option>{{ option }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="counter">maks. 2000 znaków</div>
+    </div>
+
+    <button type="submit">Generuj ofertę</button>
+</form>
+
+{% if generated %}
+<section class="card result">
+    <div class="result-head">
+        <h2>Wygenerowana oferta</h2>
+        <button type="button" class="secondary" onclick="navigator.clipboard.writeText(document.getElementById('resultText').innerText)">Kopiuj</button>
+    </div>
+    <pre id="resultText">{{ generated }}</pre>
+</section>
+{% endif %}
+
+<section class="small-note">
+    Zapytania AI: <strong>{{ ai_used }}/{{ ai_limit }}</strong>
+</section>
+{% endblock %}

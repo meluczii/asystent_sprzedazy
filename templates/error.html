@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+    <h1>Wystąpił błąd</h1>
+    <p>{{ error_message | default("Coś poszło nie tak. Spróbuj ponownie.") }}</p>
+    <a class="button" href="{{ url_for('index') }}">Powrót</a>
+</section>
+{% endblock %}

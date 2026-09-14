@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">ANALIZA DANYCH</p>
+    <h1>Sprawdź, co naprawdę<br>sprzedaje się najlepiej.</h1>
+    <p class="muted">Wgraj CSV z danymi sprzedażowymi. Python policzy statystyki, a AI przygotuje ich krótką interpretację.</p>
+</section>
+
+<form action="{{ url_for('analiza') }}" method="post" enctype="multipart/form-data" class="card upload">
+    <label for="csv_file">Plik CSV</label>
+    <input id="csv_file" type="file" name="csv_file" accept=".csv" required>
+    <p class="hint">Maksymalnie 5 MB. Aplikacja rozpoznaje popularne polskie i angielskie nazwy kolumn.</p>
+    <button type="submit">Analizuj dane</button>
+</form>
+
+{% if report %}
+<section class="stats">
+    <div class="stat"><span>Rekordy</span><strong>{{ report.rows }}</strong></div>
+    <div class="stat"><span>Łączna sprzedaż</span><strong>{{ "%.2f"|format(report.total_sales) if report.total_sales is not none else "—" }} zł</strong></div>
+    <div class="stat"><span>Średnia wartość</span><strong>{{ "%.2f"|format(report.average_order) if report.average_order is not none else "—" }} zł</strong></div>
+</section>
+
+<div class="grid">
+    <section class="card">
+        <h2>Top 5 produktów</h2>
+        {% if report.top5 %}
+        <table>
+            <thead><tr><th>Produkt</th><th>Ilość</th></tr></thead>
+            <tbody>
+            {% for item in report.top5 %}
+                <tr><td>{{ item.product }}</td><td>{{ "%.0f"|format(item.quantity) }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="muted">Brak danych.</p>{% endif %}
+    </section>
+
+    <section class="card">
+        <h2>Miesięczne sumy</h2>
+        {% if report.monthly %}
+        <table>
+            <thead><tr><th>Miesiąc</th><th>Sprzedaż</th></tr></thead>
+            <tbody>
+            {% for item in report.monthly %}
+                <tr><td>{{ item.month }}</td><td>{{ "%.2f"|format(item.value) }} zł</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="muted">Brak rozpoznanych dat sprzedaży.</p>{% endif %}
+    </section>
+</div>
+
+<section class="card">
+    <div class="result-head">
+        <h2>Podsumowanie AI</h2>
+        <a class="button secondary" href="{{ url_for('raport_html') }}">Pobierz raport HTML</a>
+    </div>
+    <div class="ai-summary">{{ report.summary }}</div>
+</section>
+
+<p class="small-note">Plik: {{ report.filename }} · wygenerowano {{ report.generated_at }}</p>
+{% endif %}
+{% endblock %}
